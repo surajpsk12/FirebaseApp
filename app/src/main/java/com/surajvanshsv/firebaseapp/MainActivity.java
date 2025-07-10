@@ -1,7 +1,6 @@
 package com.surajvanshsv.firebaseapp;
 
 import android.os.Bundle;
-import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -9,16 +8,32 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.Firebase;
+import android.os.Bundle;
+import android.util.Log;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.surajvanshsv.firebaseapp.databinding.ActivityMainBinding;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    private ArrayList<User> users;
+    private RecyclerView recyclerView;
+    private MyAdapter userAdapter;
+    private ActivityMainBinding binding;
 
+
+    // Firebase
+    DatabaseReference databaseReference;
+    FirebaseDatabase database;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,26 +42,34 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        // Write a message to the database
+        binding = DataBindingUtil.setContentView(
+                this,
+                R.layout.activity_main
+        );
 
-        // Initialize and Access the Firebase Database
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        database = FirebaseDatabase.getInstance();
+        databaseReference = database.getReference("Users");
 
-        // Get a reference to a specific node in the database
-        DatabaseReference myRef = database.getReference("Users");
 
-        User user1 = new User("Vansh","vansh123@gmail.com");
-        myRef.setValue(user1);
-//        myRef.setValue("Hii i am vansh ");
-//
 
-        TextView txt = findViewById(R.id.textview1);
-        myRef.addValueEventListener(new ValueEventListener() {
+        // RecyclerView with Databinding
+        recyclerView = binding.recyclerview;
+
+
+
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        // Fetch the Data from Firebase into RecyclerView
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                String newValue = snapshot.getValue(String.class);
-                    User user2 = snapshot.getValue(User.class);
-                    txt.setText("email:"+user2.getEmial());
+                for (DataSnapshot dataSnapshot: snapshot.getChildren()){
+                    User user = dataSnapshot.getValue(User.class);
+                    users.add(user);
+                }
+                // notify an adapter associated with a recyclerview
+                // that the underlying dataset has changed
+                userAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -54,7 +77,9 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
+        users = new ArrayList<>();
+        userAdapter = new MyAdapter(this, users);
+        recyclerView.setAdapter(userAdapter);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
