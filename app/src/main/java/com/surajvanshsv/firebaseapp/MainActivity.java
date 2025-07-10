@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private MyAdapter userAdapter;
     private ActivityMainBinding binding;
-
 
     // Firebase
     DatabaseReference databaseReference;
@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
 
         // RecyclerView with Databinding
         recyclerView = binding.recyclerview;
-
 
 
 

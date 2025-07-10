@@ -12,53 +12,172 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="8dp"
-        android:backgroundTint="@android:color/white">
+        android:layout_margin="16dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="12dp"
+        android:backgroundTint="@android:color/white"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:padding="20dp">
 
+            <!-- User Avatar/Initial Circle -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/avatarCard"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                app:cardCornerRadius="28dp"
+                app:cardElevation="4dp"
+                android:backgroundTint="#E3F2FD"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <TextView
+                    android:id="@+id/avatarText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@{user.username.substring(0,1).toUpperCase()}"
+                    android:textColor="#1976D2"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:fontFamily="sans-serif-medium" />
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- Username with enhanced styling -->
             <TextView
-                android:id="@+id/textview"
+                android:id="@+id/textViewUsername"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@{user.username}"
-                android:textColor="@android:color/black"
+                android:textColor="#1A1A1A"
                 android:textStyle="bold"
-                android:textSize="20sp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/textView2"
-                app:layout_constraintHorizontal_weight="1"
+                android:textSize="22sp"
+                android:fontFamily="sans-serif-medium"
+                app:layout_constraintTop_toTopOf="@id/avatarCard"
+                app:layout_constraintStart_toEndOf="@id/avatarCard"
+                app:layout_constraintEnd_toStartOf="@id/phoneContainer"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="8dp"
                 android:maxLines="1"
-                android:ellipsize="end" />
+                android:ellipsize="end"
+                android:letterSpacing="0.01" />
 
-            <TextView
-                android:id="@+id/textView2"
+            <!-- Phone number with icon container -->
+            <LinearLayout
+                android:id="@+id/phoneContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{user.phoneNumber}"
-                android:textColor="#4D4B4B"
-                android:textSize="16sp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/phone_background"
+                android:padding="8dp"
+                app:layout_constraintTop_toTopOf="@id/avatarCard"
+                app:layout_constraintEnd_toEndOf="parent">
 
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_phone"
+                    android:layout_marginEnd="6dp"
+                    app:tint="#4CAF50" />
+
+                <TextView
+                    android:id="@+id/textViewPhone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{user.phoneNumber}"
+                    android:textColor="#4CAF50"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium" />
+
+            </LinearLayout>
+
+            <!-- Subtitle/Description -->
             <TextView
-                android:id="@+id/textViewGroup"
+                android:id="@+id/textViewSubtitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@{user.groupUser}"
-                android:textColor="@android:color/black"
+                android:text="Active Member"
+                android:textColor="#666666"
                 android:textSize="14sp"
-                app:layout_constraintTop_toBottomOf="@id/textview"
+                android:fontFamily="sans-serif"
+                app:layout_constraintTop_toBottomOf="@id/textViewUsername"
+                app:layout_constraintStart_toEndOf="@id/avatarCard"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="2dp" />
+
+            <!-- Divider line -->
+            <View
+                android:id="@+id/divider"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="#E0E0E0"
+                app:layout_constraintTop_toBottomOf="@id/avatarCard"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginTop="12dp" />
+                android:layout_marginTop="16dp" />
+
+            <!-- Group information with enhanced styling -->
+            <LinearLayout
+                android:id="@+id/groupContainer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                app:layout_constraintTop_toBottomOf="@id/divider"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="12dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_group"
+                    android:tint="#FF9800"
+                    android:layout_marginEnd="8dp" />
+
+                <TextView
+                    android:id="@+id/textViewGroupLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Group: "
+                    android:textColor="#999999"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif" />
+
+                <TextView
+                    android:id="@+id/textViewGroup"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@{user.groupUser}"
+                    android:textColor="#333333"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium"
+                    android:maxLines="1"
+                    android:ellipsize="end" />
+
+            </LinearLayout>
+
+            <!-- Status indicator -->
+            <View
+                android:id="@+id/statusIndicator"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:background="@drawable/status_indicator"
+                app:layout_constraintTop_toTopOf="@id/avatarCard"
+                app:layout_constraintEnd_toEndOf="@id/avatarCard"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
